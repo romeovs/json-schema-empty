@@ -77,3 +77,4 @@ var _integer = function(schema) {
 };
 
 export default _integer;
+export { minmul, maxmul };
