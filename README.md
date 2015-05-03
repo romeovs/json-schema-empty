@@ -21,7 +21,7 @@ conforms to the following qualities:
    the date will be the same.
   - the data is as simple as possible
   - the data conforms to the *form* specified in the schema.  It will
-    sometimes fail to be valid according to the schema howrver.  The reason
+    sometimes fail to be valid according to the schema however.  The reason
     for this is simple: you cannot generate all values automatically (see the
     [rules](#rules) section for more info on this).
 
