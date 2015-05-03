@@ -47,7 +47,12 @@ var _integer = function(schema) {
     return 0;
   } else if ( !mo &&  mi &&  ma ) {
     // minimum and maximum
-    return minimum;
+    if ( ( exclusiveMinimum && minimum < 0 || !exclusiveMinimum && minimum <= 0 ) &&
+         ( exclusiveMaximum && maximum > 0 || !exclusiveMaximum && maximum >= 0 ) ) {
+      return 0;
+    } else {
+      return minimum;
+    }
   } else if (  mo && !mi &&  ma ) {
     // multipleOf and maximum
     return maxmul(maximum, multipleOf, exclusiveMinimum);
