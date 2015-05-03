@@ -55,4 +55,17 @@ describe('object schema definition', function() {
 
     done();
   });
+
+  it('should error when required object property is not given', function(done) {
+    var f = function() {
+      empty({
+        type: 'object'
+      , properties: {}
+      , required: ['foo']
+      });
+    };
+
+    expect(f).to.throw(Error);
+    done();
+  });
 });

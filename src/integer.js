@@ -17,14 +17,18 @@ var minmul = function(minimum, multipleOf, exclusive) {
 
   var sign  = multipleOf  / Math.abs(multipleOf);
   var quot = (min - rest) / multipleOf;
-  return (quot + sign) * multipleOf;
+
+
+  var res = (quot + sign) * multipleOf;
+  return res === -0 ? 0 : res;
 };
 
 // create smallest number that satisfies:
 // it bigger than minimum and it is mulitple of multipleOf
 var maxmul = function(maximum, multipleOf, exclusive) {
   // this is symmtric to minmul
-  return -minmul(-maximum, multipleOf, exclusive);
+  var res = -minmul(-maximum, multipleOf, exclusive);
+  return res === -0 ? 0 : res;
 };
 
 var _integer = function(schema) {
@@ -43,9 +47,8 @@ var _integer = function(schema) {
     , ma = maximum    !== undefined
     ;
 
-         if (  mo &&  mi &&  ma ) {
-    return 0;
-  } else if ( !mo &&  mi &&  ma ) {
+  if ( (  mo &&  mi &&  ma ) ||
+       ( !mo &&  mi &&  ma ) ) {
     // minimum and maximum
     if ( ( exclusiveMinimum && minimum < 0 || !exclusiveMinimum && minimum <= 0 ) &&
          ( exclusiveMaximum && maximum > 0 || !exclusiveMaximum && maximum >= 0 ) ) {

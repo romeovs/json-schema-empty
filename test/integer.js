@@ -1,5 +1,5 @@
-import { minmul
-       , maxmul }   from '../src/integer';
+// import { minmul
+//        , maxmul }   from '../src/integer';
 import empty        from '../src';
 import { expect }   from './instrument';
 import quickcheck   from 'quickcheck';
@@ -10,24 +10,37 @@ var { describe
     , it } = lab;
 export { lab };
 
-var validmin = function(min, mul, exclusive) {
-  var gen = minmul(min, mul, exclusive);
-  var mulok = (gen % mul) === 0;
-  if ( exclusive ) {
-    return mulok && gen >  min;
+var valid = function(min, limit, multipleOf, exclusive) {
+  var gen, schema;
+  if ( min ) {
+    schema = {
+      type: 'integer'
+    , minimum: limit
+    , multipleOf
+    , exclusiveMinimum: exclusive
+    };
+    gen = empty(schema);
+    if (( exclusive && gen <= limit ) || ( !exclusive && gen < limit )) {
+      return false;
+    }
   } else {
-    return mulok && gen >= min;
+    schema = {
+      type: 'integer'
+    , maximum: limit
+    , multipleOf
+    , exclusiveMaximum: exclusive
+    };
+    gen = empty(schema);
+    if (( exclusive && gen >= limit ) || ( !exclusive && gen > limit )) {
+      return false;
+    }
   }
-};
 
-var validmax = function(max, mul, exclusive) {
-  var gen = maxmul(max, mul, exclusive);
-  var mulok = (gen % mul) === 0;
-  if ( exclusive ) {
-    return mulok && gen <  max;
-  } else {
-    return mulok && gen <= max;
+  if ( gen % multipleOf !== 0 ) {
+    return false;
   }
+
+  return true;
 };
 
 var arbInt = function() {
@@ -41,7 +54,8 @@ var arbSmallInt = function() {
 describe('integers', function() {
   it('should generate correct integers, min', function(done) {
     var res =
-      quickcheck.forAll( validmin
+      quickcheck.forAll( valid
+                       , quickcheck.arbBool
                        , arbInt
                        , arbSmallInt
                        , quickcheck.arbBool);
@@ -49,20 +63,161 @@ describe('integers', function() {
       done();
   });
 
-  it('should generate correct integers, max', function(done) {
-    var res =
-      quickcheck.forAll( validmax
-                       , arbInt
-                       , arbSmallInt
-                       , quickcheck.arbBool);
-      expect(res).to
-        .equal(true);
-      done();
+  it('should return 0 when no constraints are given', function(done) {
+    var schema = {
+      type: 'integer'
+    };
+
+    expect(empty(schema)).to
+      .deep.equal(0);
+
+    done();
+  });
+
+  it('should return minimum if divisible by multipleOf', function(done) {
+    var schema = {
+      type: 'integer'
+    , minimum: 10
+    , multipleOf: 2
+    };
+
+    expect(empty(schema)).to
+      .deep.equal(10);
+
+    done();
+  });
+
+  it('should return min if min, max and multiple are given', function(done) {
+    var schema = {
+      type: 'integer'
+    , minimum: 10
+    , maximum: 20
+    , multipleOf: 2
+    };
+
+    expect(empty(schema)).to
+      .deep.equal(10);
+    done();
+  });
+
+  it('should return min if min, max and multiple are given and 0 is not in range', function(done) {
+    var schema = {
+      type: 'integer'
+    , minimum: 10
+    , maximum: 20
+    , multipleOf: 2
+    };
+
+    expect(empty(schema)).to
+      .deep.equal(10);
+    done();
+  });
+
+  it('should return min if min, max and multiple are given', function(done) {
+    var schema = {
+      type: 'integer'
+    , minimum: -10
+    , maximum: 20
+    , multipleOf: 2
+    };
+
+    expect(empty(schema)).to
+      .deep.equal(0);
+    done();
+  });
+
+  it('should return 0 if only multipleOf is given', function(done) {
+    var schema = {
+      type: 'integer'
+    , multipleOf: 2
+    };
+
+    expect(empty(schema)).to
+      .deep.equal(0);
+    done();
+  });
+
+  it('should return 0 if maximum allows it', function(done) {
+    var schema = {
+      type: 'integer'
+    , multipleOf: 2
+    , maximum: 10
+    };
+
+    expect(empty(schema)).to
+      .deep.equal(0);
+    done();
+  });
+
+  it('should work with only minimum', function(done) {
+    expect(empty({
+      type: 'integer'
+    , minimum: 5
+    })).to
+      .deep.equal(5);
+
+    expect(empty({
+      type: 'integer'
+    , minimum: -5
+    , exclusiveMinimum: true
+    })).to
+      .deep.equal(0);
+
+    expect(empty({
+      type: 'integer'
+    , minimum: -5
+    })).to
+      .deep.equal(0);
+
+    expect(empty({
+      type: 'integer'
+    , minimum: 5
+    , exclusiveMinimum: true
+    })).to
+      .deep.equal(6);
+
+    done();
+  });
+
+  it('should work with only maximum', function(done) {
+    expect(empty({
+      type: 'integer'
+    , maximum: 5
+    })).to
+      .deep.equal(0);
+
+    expect(empty({
+      type: 'integer'
+    , maximum: 5
+    , exclusiveMaximum: true
+    })).to
+      .deep.equal(0);
+
+    expect(empty({
+      type: 'integer'
+    , maximum: 5
+    })).to
+      .deep.equal(0);
+
+    expect(empty({
+      type: 'integer'
+    , maximum: -5
+    , exclusiveMaximum: true
+    })).to
+      .deep.equal(-6);
+
+    expect(empty({
+      type: 'integer'
+    , maximum: -5
+    })).to
+      .deep.equal(-5);
+
+    done();
   });
 
   it('should work with default', function(done) {
     var schema = {
-      type: 'boolean'
+      type: 'integer'
     , default: 42
     };
 

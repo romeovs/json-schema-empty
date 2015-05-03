@@ -86,10 +86,6 @@ var _string = function() {
 
 // create empty value based on schema <<
 empty = function(schema, global) {
-  if ( !schema ) {
-    throw new Error('empty requires schema argument');
-  }
-
   var {
     type
   , 'default': default_  // rename default to default_
