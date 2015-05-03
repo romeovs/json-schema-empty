@@ -1,0 +1,25 @@
+
+parser: babel-eslint    # use babel parser
+
+settings:
+  ecmascript : 6        # enable ES6 features
+
+env:
+  browser : true        # add browser env
+  node    : true        # add node env
+  es6     : true        # add es6 env
+  mocha   : true        # add mocha env
+
+ecmaFeatures:
+  modules: true
+
+rules:
+  quotes:
+    - 1                 # quotes are warnign
+    - 'single'          # prefer single quotes (')
+  no-multi-spaces : 0   # allow multiple spaces after each other
+  no-multi-str    : 0   # disable multiine string error (jsx bug)
+  strict          : 0   # disable strict message, it is implied in ES6
+  key-spacing     : 0   # disable warnings keyspacing because we use comma at newline
+
+# vim: ft=yaml
