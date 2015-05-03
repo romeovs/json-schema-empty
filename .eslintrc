@@ -21,5 +21,6 @@ rules:
   no-multi-str    : 0   # disable multiine string error (jsx bug)
   strict          : 0   # disable strict message, it is implied in ES6
   key-spacing     : 0   # disable warnings keyspacing because we use comma at newline
+  no-underscore-dangle: 0 # allow dangling underscores
 
 # vim: ft=yaml
