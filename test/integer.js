@@ -1,5 +1,6 @@
 import { minmul
        , maxmul }   from '../src/integer';
+import empty        from '../src';
 import { expect }   from './instrument';
 import quickcheck   from 'quickcheck';
 import Lab          from 'lab';
@@ -54,8 +55,21 @@ describe('integers', function() {
                        , arbInt
                        , arbSmallInt
                        , quickcheck.arbBool);
-      expect(res).to.equal(true);
+      expect(res).to
+        .equal(true);
       done();
+  });
+
+  it('should work with default', function(done) {
+    var schema = {
+      type: 'boolean'
+    , default: 42
+    };
+
+    expect(empty(schema)).to
+      .deep.equal(42);
+
+    done();
   });
 });
 
