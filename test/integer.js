@@ -10,7 +10,7 @@ export { lab };
 
 // property that describes valid integers
 var valid = function(min, limit, multipleOf, exclusive) {
-  if ( multipleOf === 0 ) { return true; }
+  if ( multipleOf === 0 ) { return undefined; }
 
   min = false;
   // min or max?
@@ -42,14 +42,51 @@ var valid = function(min, limit, multipleOf, exclusive) {
   return res;
 };
 
+var validminmax = function([minimum, maximum], exclusiveMinimum, exclusiveMaximum) {
+  // avoid impossible case
+  if ( minimum === maximum && (exclusiveMinimum || exclusiveMaximum)) {
+    return undefined;
+  }
+
+  var schema = {
+    type: 'integer'
+  , minimum
+  , maximum
+  , exclusiveMinimum
+  , exclusiveMaximum
+  };
+
+  var gen = empty(schema);
+
+  var min = (gen > minimum) || (!exclusiveMinimum && gen >= minimum);
+  var max = (gen < maximum) || (!exclusiveMaximum && gen <= maximum);
+
+  var res = min && max;
+  if ( !res ) {
+    console.log(schema, gen, min, max);
+  }
+  return res;
+};
+
 
 describe('integers', function() {
-  it('should generate correct integers', function(done) {
+  it('should generate correct multiples', function(done) {
     var res =
       quickcheck(valid, quickcheck.bool
                       , quickcheck.int.between(-10000, 10000)
                       , quickcheck.int.between(-15, 15)
                       , quickcheck.bool);
+      console.log(res.message);
+      expect(res.pass).to.equal(true);
+      done();
+  });
+
+  it('should generate in the correct range', function(done) {
+    var res =
+      quickcheck(validminmax, quickcheck.range(quickcheck.int.between(-10000, 10000))
+                            , quickcheck.bool
+                            , quickcheck.bool);
+
       console.log(res.message);
       expect(res.pass).to.equal(true);
       done();
@@ -137,7 +174,7 @@ describe('integers', function() {
     };
 
     expect(empty(schema)).to
-      .deep.equal(0);
+      .equal(0);
     done();
   });
 

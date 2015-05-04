@@ -4,7 +4,7 @@
 var minmul = function(minimum, multipleOf, exclusive) {
 
   // if we can return 0, we do that
-  if (( exclusive && minimum < 0 ) || ( !exclusive && minimum <= 0 )) {
+  if (( minimum < 0 ) || ( !exclusive && minimum <= 0 )) {
     return 0;
   }
 
@@ -18,9 +18,7 @@ var minmul = function(minimum, multipleOf, exclusive) {
   var sign  = multipleOf  / Math.abs(multipleOf);
   var quot = (min - rest) / multipleOf;
 
-
-  var res = (quot + sign) * multipleOf;
-  return res === -0 ? 0 : res;
+  return (quot + sign) * multipleOf;
 };
 
 // create smallest number that satisfies:
@@ -28,8 +26,6 @@ var minmul = function(minimum, multipleOf, exclusive) {
 var maxmul = function(maximum, multipleOf, exclusive) {
   // this is symmtric to minmul
   var res = -minmul(-maximum, multipleOf, exclusive);
-
-  // remove -0
   return res === -0 ? 0 : res;
 };
 
@@ -111,7 +107,7 @@ var _integer = function(schema) {
     } else {
       return minimum <= 0 ? 0 : minimum;
     }
-  } else if ( !mo && !mi && !ma ) {
+  } else {
     // totally free choice
     return 0;
   }
