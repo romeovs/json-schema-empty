@@ -28,8 +28,40 @@ var minmul = function(minimum, multipleOf, exclusive) {
 var maxmul = function(maximum, multipleOf, exclusive) {
   // this is symmtric to minmul
   var res = -minmul(-maximum, multipleOf, exclusive);
+
+  // remove -0
   return res === -0 ? 0 : res;
 };
+
+// var minmaxmul = function(minimum, maximum, multipleOf, xMin, xMax) {
+//   // if we can return 0, we do that
+//   if (    (( minimum < 0 ) || ( !xMin && minimum <= 0 ))
+//        && (( maximum > 0 ) || ( !xMax && maximum >= 0 ))) {
+//     return 0;
+//   }
+//
+//   var min = xMin ? minimum + 1 : minimum;
+//   var max = xMax ? maximum + 1 : maximum;
+//
+//   var minRest = min % mulitpleOf;
+//   if ( minRest === 0 ) {
+//     return min;
+//   };
+//
+//   var maxRest = max % multipleOf;
+//
+//   var minQuot = (min - minRest) / multipleOf;
+//   var maxQuot = (max - maxRest) / multipleOf;
+//
+//   var diff = maxQuot - diffQuot;
+//
+//   if ( diff >= 1 ) {
+//     return
+//   }
+//
+//
+//
+// };
 
 var _integer = function(schema) {
   // todo
@@ -50,17 +82,18 @@ var _integer = function(schema) {
   if ( (  mo &&  mi &&  ma ) ||
        ( !mo &&  mi &&  ma ) ) {
     // minimum and maximum
-    if ( ( exclusiveMinimum && minimum < 0 || !exclusiveMinimum && minimum <= 0 ) &&
-         ( exclusiveMaximum && maximum > 0 || !exclusiveMaximum && maximum >= 0 ) ) {
+    if (    (( minimum < 0 ) || ( !exclusiveMinimum && minimum <= 0 ))
+         && (( maximum > 0 ) || ( !exclusiveMaximum && maximum >= 0 ))) {
       return 0;
     } else {
       return minimum;
     }
   } else if (  mo && !mi &&  ma ) {
     // multipleOf and maximum
-    return maxmul(maximum, multipleOf, exclusiveMinimum);
+    return maxmul(maximum, multipleOf, exclusiveMaximum);
   } else if (  mo &&  mi && !ma ) {
-    return minmul(minimum, multipleOf, exclusiveMaximum);
+    // multipleOf and minimum
+    return minmul(minimum, multipleOf, exclusiveMinimum);
   } else if (  mo && !mi && !ma ) {
     // only multipleOf
     return 0;
@@ -79,10 +112,9 @@ var _integer = function(schema) {
       return minimum <= 0 ? 0 : minimum;
     }
   } else if ( !mo && !mi && !ma ) {
-    // totally free
+    // totally free choice
     return 0;
   }
 };
 
 export default _integer;
-export { minmul, maxmul };

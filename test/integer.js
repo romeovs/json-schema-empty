@@ -12,7 +12,7 @@ export { lab };
 var valid = function(min, limit, multipleOf, exclusive) {
   if ( multipleOf === 0 ) { return true; }
 
-  min = true;
+  min = false;
   // min or max?
   var ix = min ? 'in' : 'ax';
 
@@ -30,7 +30,7 @@ var valid = function(min, limit, multipleOf, exclusive) {
 
   // gen should comply to limits
   var small = min ? limit : gen;
-  var big   = min ? gen   : linit;
+  var big   = min ? gen   : limit;
 
   var limits = ( small < big ) || ( !exclusive && small <= big );
 
