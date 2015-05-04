@@ -153,6 +153,8 @@ empty = function(schema, global) {
     // one of the schema's is ok so pick the first
     // todo: is this deterministic?
     return empty(oneOf[0], global);
+  } else {
+    throw new Error(`cannot generate data from schema ${schema}`);
   }
 };
 // >>

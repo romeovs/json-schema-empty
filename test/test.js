@@ -7,34 +7,31 @@ var { describe
     , it } = lab;
 export { lab };
 
+var throwing = function(schema, err = Error) {
+  var f = function() {
+    return empty(schema);
+  };
+
+  expect(f).to.throw(err);
+};
+
+
 describe('errors', function() {
 
   it('should error on unknown type', function(done) {
-    var f = function() {
-      empty({
-        type: 'bla'
-      });
-    };
-
-    expect(f).to.throw(Error);
+    throwing({
+      type: 'bla'
+    });
     done();
   });
 
   it('should error when no schema is passed', function(done) {
-    var f = function() {
-      empty();
-    };
-
-    expect(f).to.throw(Error);
+    throwing();
     done();
   });
 
-  it('should error o', function(done) {
-    var f = function() {
-      empty();
-    };
-
-    expect(f).to.throw(Error);
+  it('should throw when invalid schema is passed', function(done) {
+    throwing({});
     done();
   });
 
