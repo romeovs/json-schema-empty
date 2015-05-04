@@ -76,7 +76,6 @@ describe('integers', function() {
                       , quickcheck.int.between(-10000, 10000)
                       , quickcheck.int.between(-15, 15)
                       , quickcheck.bool);
-      console.log(res.message);
       expect(res.pass).to.equal(true);
       done();
   });
@@ -87,7 +86,6 @@ describe('integers', function() {
                             , quickcheck.bool
                             , quickcheck.bool);
 
-      console.log(res.message);
       expect(res.pass).to.equal(true);
       done();
   });
