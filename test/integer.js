@@ -1,8 +1,6 @@
-// import { minmul
-//        , maxmul }   from '../src/integer';
 import empty        from '../src';
 import { expect }   from './instrument';
-import quickcheck   from 'quickcheck';
+import quickcheck   from 'quick_check';
 import Lab          from 'lab';
 
 var lab = Lab.script();
@@ -10,56 +8,50 @@ var { describe
     , it } = lab;
 export { lab };
 
+// property that describes valid integers
 var valid = function(min, limit, multipleOf, exclusive) {
-  var gen, schema;
-  if ( min ) {
-    schema = {
-      type: 'integer'
-    , minimum: limit
-    , multipleOf
-    , exclusiveMinimum: exclusive
-    };
-    gen = empty(schema);
-    if (( exclusive && gen <= limit ) || ( !exclusive && gen < limit )) {
-      return false;
-    }
-  } else {
-    schema = {
-      type: 'integer'
-    , maximum: limit
-    , multipleOf
-    , exclusiveMaximum: exclusive
-    };
-    gen = empty(schema);
-    if (( exclusive && gen >= limit ) || ( !exclusive && gen > limit )) {
-      return false;
-    }
+  if ( multipleOf === 0 ) { return true; }
+
+  min = true;
+  // min or max?
+  var ix = min ? 'in' : 'ax';
+
+  var schema = {
+    type: 'integer'
+  , [`m${ix}imum`]: limit
+  , multipleOf
+  , [`exclusiveM${ix}imum`]: exclusive
+  };
+
+  var gen = empty(schema);
+
+  // gen should be multipleOf
+  var multiple = ( gen % multipleOf === 0 );
+
+  // gen should comply to limits
+  var small = min ? limit : gen;
+  var big   = min ? gen   : linit;
+
+  var limits = ( small < big ) || ( !exclusive && small <= big );
+
+  var res = multiple && limits;
+
+  if ( !res ) {
+    console.log(schema, gen, multiple, limits);
   }
-
-  if ( gen % multipleOf !== 0 ) {
-    return false;
-  }
-
-  return true;
+  return res;
 };
 
-var arbInt = function() {
-  return (Math.round(Math.random()) * 100000) - 50000;
-};
-
-var arbSmallInt = function() {
-  return (Math.round(Math.random()) * 30) - 15;
-};
 
 describe('integers', function() {
-  it('should generate correct integers, min', function(done) {
+  it('should generate correct integers', function(done) {
     var res =
-      quickcheck.forAll( valid
-                       , quickcheck.arbBool
-                       , arbInt
-                       , arbSmallInt
-                       , quickcheck.arbBool);
-      expect(res).to.equal(true);
+      quickcheck(valid, quickcheck.bool
+                      , quickcheck.int.between(-10000, 10000)
+                      , quickcheck.int.between(-15, 15)
+                      , quickcheck.bool);
+      console.log(res.message);
+      expect(res.pass).to.equal(true);
       done();
   });
 

@@ -25,7 +25,7 @@
     "gulp": "latest",
     "gulp-eslint": "latest",
     "lab": "latest",
-    "quickcheck": "0.0.4"
+    "quick_check": "git://github.com/gampleman/quick_check.js"
   },
   "dependencies": {
     "simple-json-schema-deref": "^0.1.0"
