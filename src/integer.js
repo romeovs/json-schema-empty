@@ -86,7 +86,7 @@ var _integer = function(schema) {
          && (( maximum > 0 ) || ( !exclusiveMaximum && maximum >= 0 ))) {
       return 0;
     } else {
-      return minimum;
+      return exclusiveMinimum ? minimum + 1 : minimum;
     }
   } else if (  mo && !mi &&  ma ) {
     // multipleOf and maximum
