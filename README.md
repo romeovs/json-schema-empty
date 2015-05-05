@@ -28,7 +28,7 @@ conforms to the following qualities:
 ## Usage
 To install `json-schema-empty`, run:
 ```sh
-npm install json-schema-empty --save
+npm install romeovs/json-schema-empty --save
 ```
 
 The api is simple:
