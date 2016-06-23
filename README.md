@@ -28,12 +28,13 @@ conforms to the following qualities:
 ## Usage
 To install `json-schema-empty`, run:
 ```sh
-npm install romeovs/json-schema-empty --save
+npm install json-schema-empty --save
 ```
 
 The api is simple:
 ```js
 import empty from 'json-schema-empty';
+// var empty = require('json-schema-empty').default; // when not using es6
 
 var schema = {
   type: 'object'
@@ -49,7 +50,7 @@ var schema = {
     , minItems: 3
     }
   , baz: {
-      type: 'string'
+      type: 'string',
       minLength: 5
     }
   }
