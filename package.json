@@ -4,7 +4,7 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "postinstall": "babel --optional runtime src -d build",
+    "prepublish": "babel --optional runtime src -d build",
     "test": "lab -T babel.js -S",
     "coverage": "npm run test -- --coverage -r lcov | ./node_modules/.bin/coveralls",
     "hcoverage": "npm run test -- --coverage -r html -o coverage.html && open coverage.html",
@@ -28,6 +28,7 @@
     "quick_check": "git://github.com/gampleman/quick_check.js"
   },
   "dependencies": {
+    "babel-preset-es2015": "^6.9.0",
     "simple-json-schema-deref": "^0.1.0"
   }
 }
