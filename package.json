@@ -4,7 +4,7 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "compile": "babel --optional runtime src -d build",
+    "postinstall": "babel --optional runtime src -d build",
     "test": "lab -T babel.js -S",
     "coverage": "npm run test -- --coverage -r lcov | ./node_modules/.bin/coveralls",
     "hcoverage": "npm run test -- --coverage -r html -o coverage.html && open coverage.html",
@@ -17,7 +17,7 @@
   "author": "Romeo Van Snick <romeovs@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "babel": "latest",
+    "babel-cli": "latest",
     "babel-eslint": "latest",
     "babel-runtime": "latest",
     "chai": "latest",
