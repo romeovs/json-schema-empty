@@ -1,5 +1,7 @@
 # json-schema-empty
 
+[![Join the chat at https://gitter.im/romeovs/json-schema-empty](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/romeovs/json-schema-empty?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://img.shields.io/travis/romeovs/json-schema-empty.svg?style=flat-square)][travis]
 [![Coverage Status](https://img.shields.io/coveralls/romeovs/json-schema-empty.svg?style=flat-square)][coveralls]
 [![Dependencies](https://img.shields.io/david/romeovs/json-schema-empty.svg?style=flat-square)][david]
